@@ -1,4 +1,4 @@
-window.socket = io('http://localhost:3000')
+@socket = io('http://localhost:3000')
 
 socket.on 'ports', (data) ->
   console.log(data)
@@ -41,3 +41,23 @@ socket.on 'readings', (data) ->
     .removeClass('no')
     .addClass(ans)
   window.resetCard = setTimeout(answer,1000)
+
+@speech = 0
+
+@say = (text) ->
+  socket.emit('tts',{text:text})
+socket.on 'tts', (data) ->
+  speech = window.speech
+  speech = new Audio('data:audio/mp3;base64,'+data.audio)
+  $(speech).bind('ended',-> listenForGesture(500))
+  speech.play();
+listenForGesture = (ms) ->
+  ding = new Audio('audio/ping1.wav')
+  ding.play()
+  # Set up to take the buffer and compute the desired response.
+  responseWindow = setTimeout(->
+      console.log('Theoretically, compute something!')
+    ,ms)
+  # Some socket thing listening for stuff and adding it to an array
+  # Meanwhile, changing color of the card to reflect what it thinks you're doing
+  # Perhaps kill the responseWindow if you think the response is resounding

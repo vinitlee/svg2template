@@ -10,6 +10,7 @@ io = require('socket.io')(server)
 path = require('path')
 cookieParser = require('cookie-parser')
 bodyParser = require('body-parser')
+tts = require('node-google-text-to-speech')
 
 # Routing ----------
 
@@ -47,6 +48,8 @@ server = server.listen app.get('port'), () ->
 
 serial = require("serialport")
 
+# Sockets ---------
+
 io.on 'connection', (socket) ->
   console.log '--- Socket Connected'
 
@@ -68,3 +71,11 @@ io.on 'connection', (socket) ->
           data = data.toString().split(',')
           data = (parseFloat str for str in data)
           socket.emit('readings', { d: data });
+  socket.on 'tts', (data) ->
+    tts.translate('en', data.text, (result) ->
+      console.log result
+      if result.success # check for success
+        response =
+          'audio' : result.audio
+        socket.emit('tts', response) # emit the audio to client
+    )

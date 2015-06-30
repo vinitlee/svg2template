@@ -72,10 +72,12 @@ io.on 'connection', (socket) ->
           data = (parseFloat str for str in data)
           socket.emit('readings', { d: data });
   socket.on 'tts', (data) ->
+    console.log data
     tts.translate('en', data.text, (result) ->
-      console.log result
+      # console.log result
       if result.success # check for success
         response =
           'audio' : result.audio
+          'callback' : data.callback
         socket.emit('tts', response) # emit the audio to client
     )

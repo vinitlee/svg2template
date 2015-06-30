@@ -44,13 +44,19 @@ socket.on 'readings', (data) ->
 
 @speech = 0
 
-@say = (text) ->
-  socket.emit('tts',{text:text})
+@sayCalls = {}
+@sayListen = (text) ->
+  say(text,->listenForGesture(2000))
+@say = (text,callback = ()->null) ->
+  speech.ended = false
+  r = Math.floor(Math.random()*100)
+  window.sayCalls[r] = callback
+  socket.emit('tts',{text:text,callback:r})
 socket.on 'tts', (data) ->
-  speech = window.speech
   speech = new Audio('data:audio/mp3;base64,'+data.audio)
-  $(speech).bind('ended',-> listenForGesture(500))
-  speech.play();
+  window.speech = speech
+  $(speech).bind('ended',->sayCalls[data.callback]())
+  speech.play()
 listenForGesture = (ms) ->
   ding = new Audio('audio/ping1.wav')
   ding.play()

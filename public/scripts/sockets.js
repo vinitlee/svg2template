@@ -58,18 +58,36 @@
 
   this.speech = 0;
 
-  this.say = function(text) {
+  this.sayCalls = {};
+
+  this.sayListen = function(text) {
+    return say(text, function() {
+      return listenForGesture(2000);
+    });
+  };
+
+  this.say = function(text, callback) {
+    var r;
+    if (callback == null) {
+      callback = function() {
+        return null;
+      };
+    }
+    speech.ended = false;
+    r = Math.floor(Math.random() * 100);
+    window.sayCalls[r] = callback;
     return socket.emit('tts', {
-      text: text
+      text: text,
+      callback: r
     });
   };
 
   socket.on('tts', function(data) {
     var speech;
-    speech = window.speech;
     speech = new Audio('data:audio/mp3;base64,' + data.audio);
+    window.speech = speech;
     $(speech).bind('ended', function() {
-      return listenForGesture(500);
+      return sayCalls[data.callback]();
     });
     return speech.play();
   });

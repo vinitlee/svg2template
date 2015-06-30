@@ -1,0 +1,111 @@
+@require(layout)
+
+*
+  outline none
+  &:active
+    outline none
+
+body
+  background #33332C
+  color #555
+  font-family 'Roboto','Helvetica Neue', 'Helvetica', sans-serif
+
+h1,h2
+  font-weight 200
+  font-size 24pt
+  margin 0
+  text-transform uppercase
+
+p
+  margin 0
+  font-size 0.5em
+  color #AAA
+
+h1
+  color #AAA
+
+select
+  font inherit
+  color inherit
+
+.head
+  position absolute
+  left 15px
+  top 10px
+
+//.channels
+//  display flex
+//  position absolute
+//  top 50%
+//  width 100vw
+//  .pad
+//    flex 1
+//    background #F0F
+//    height 1px
+//    margin-right 10px
+//    justify-content left
+//    align-items flex-end
+//    display flex
+//    color white
+//    font-weight 200
+//    font-size 10px
+//    text-transform uppercase
+
+button
+  font inherit
+  text-transform inherit
+  color inherit
+  background none
+  border none
+  padding 0
+  margin-right 10px
+  cursor pointer
+  &.selected
+    color #E8E4D5
+  &:active
+    color white
+
+.serial
+  margin-top 5px
+  .port
+    font-size 0.5em
+    display block
+
+.question
+  width 3.5in
+  height 2in
+  background #E8E4D5
+  color #615445
+  box-shadow 10px 10px 0 0 rgba(0,0,0,0.2)
+  transition 0.5s background, 0.5s color
+  position relative
+  overflow hidden
+  &::after
+      content ''
+      opacity 0.2
+      font-weight 100
+      font-size 36px
+      position absolute
+      right 15px
+      bottom -2em
+      transition 0.5s bottom, 0.5s opacity
+  &.yes
+    background #76D68E
+    color #FFF8C3
+    &::after
+      content 'Yes.'
+      opacity 1
+      bottom 15px
+  &.no
+    background #E8826D
+    color #9F5038
+    &::after
+      content 'No.'
+      opacity 1
+      bottom 15px
+
+  .text
+    width 50%
+    font-weight 100
+    font-size 24px
+    margin 15px
